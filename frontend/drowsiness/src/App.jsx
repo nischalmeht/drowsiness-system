@@ -5,7 +5,7 @@ import { Login } from './components/Login';
 // import Driver from './components/Driverdashboard';
 import { Fragment } from 'react';
 import Driverdashboard from './components/driverDashboard';
-import { Dashboard } from './components/dashboard';
+import { Dashboard } from './components/Dashboard';
 
 
 export const App=()=> {

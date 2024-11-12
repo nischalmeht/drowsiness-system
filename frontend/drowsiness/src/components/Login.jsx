@@ -14,10 +14,12 @@ export const Login = () => {
     setDriver(!isDriver);
     // setIsActive(!isActive);
     // alert(isDriver);
+    // DriverLogin()
   };
   const navigate = useNavigate();
   const signIn = async (e) => {
-   
+   if(!isDriver){
+    
     e.preventDefault(); // Prevents the default form submission behavior
     const formData = new FormData(e.target)
     const data = {
@@ -33,6 +35,38 @@ export const Login = () => {
         if(res && res==200){
           localStorage.setItem("localData",JSON.stringify(user));
           navigate('/dashboard')
+        } 
+        
+        console.log('response',response)
+        // alert('login successfully','ae');
+      } catch (error) {
+        console.error('Error signing in:', error);
+        alert('Sign In failed: ' + error.response.data.message);
+      }
+   }else{
+    alert('Driver')
+    DriverLogin(e)
+   }
+      
+    
+    
+  };
+  const DriverLogin = async (e) => {
+   
+    const formData = new FormData(e.target)
+    const data = {
+        email: formData.get('email_signin'), // Accessing the email from the form
+        password: formData.get('password_signin'), // Accessing the password from the form
+      };
+      e.preventDefault(); // Prevents the default form submission behavior
+      console.log('Sign In Data:', data); // Log the form values
+      try {
+        const response = await axios.post('http://localhost:8001/url/login-driver', data);
+        let res = response && response.data && response.data.EncryptedResponse && response.data.EncryptedResponse.status_code ? response.data.EncryptedResponse.status_code :"";
+       let user = response && response.data && response.data.EncryptedResponse && response.data.EncryptedResponse.data ? response.data.EncryptedResponse.data :"";
+        if(res && res==200){
+          localStorage.setItem("localData",JSON.stringify(user));
+          navigate('/driverdashboard')
         } 
         
         console.log('response',response)
@@ -65,7 +99,7 @@ export const Login = () => {
        
     
         setIsActive(!isActive);
-        alert(response,'ae');
+        alert("Signup done successfully");
       } catch (error) {
         console.error('Error signing in:', error);
         alert('Sign In failed: ' + error.response.data.message);

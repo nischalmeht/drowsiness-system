@@ -3,7 +3,18 @@ import React from 'react';
 // import DataTable from './DataTable';
 import './Dashboard.css'
 import WebcamCapture from './WebcamCapture';
-const Driverdashboard = () => (
+import { useNavigate } from 'react-router-dom';
+
+let user = localStorage.getItem("localData");
+let userData = JSON.parse(user);
+
+export const Driverdashboard = () => {
+    const logout=()=>{
+        localStorage.removeItem('localData');
+        navigate('/')
+    }
+    const navigate = useNavigate();
+ return (
  <>
    <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
         
@@ -76,8 +87,8 @@ const Driverdashboard = () => (
                                 <i className="bi bi-person-square"></i> Account
                             </a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">
+                        <li className="nav-item" onClick={logout}>
+                            <a className="nav-link"  >
                                 <i className="bi bi-box-arrow-left"></i> Logout
                             </a>
                         </li>
@@ -93,19 +104,9 @@ const Driverdashboard = () => (
                         <div className="row align-items-center">
                             <div className="col-sm-6 col-12 mb-4 mb-sm-0">
                                
-                                <h1 className="h2 mb-0 ls-tight">Driver</h1>
+                                <h1 className="h2 mb-0 ls-tight">{userData && userData[0] && userData[0].name ? userData[0].name :''}</h1>
                             </div>
-                            <div className="col-sm-6 col-12 text-sm-end">
-                                <div className="mx-n1">
-                                    
-                                    <a href="#" className="btn d-inline-flex btn-sm btn-primary mx-1">
-                                        <span className=" pe-2">
-                                            <i className="bi bi-plus"></i>
-                                        </span>
-                                        <span>Create</span>
-                                    </a>
-                                </div>
-                            </div>
+                        
                         </div>
                        
                     </div>
@@ -115,6 +116,7 @@ const Driverdashboard = () => (
         </div>
     </div>
  </>
-);
+ )
+};
 
 export default Driverdashboard;

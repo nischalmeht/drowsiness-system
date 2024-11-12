@@ -50,7 +50,6 @@ const audioRef = useRef(null);
 
   const playAudio = () => {
     if (audioRef.current) {
-      alert('hiiii')
       audioRef.current.play();
       setTimeout(() => {
         audioRef.current.pause();
@@ -61,7 +60,6 @@ const audioRef = useRef(null);
 
   return (
     <div>
-      <h2>Webcam Capture</h2>
       <Webcam
         audio={false}
         ref={webcamRef}

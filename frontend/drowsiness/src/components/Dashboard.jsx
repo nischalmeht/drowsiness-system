@@ -1,6 +1,7 @@
 // components/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 // import DataTable from './DataTable';
 import './Dashboard.css'
 
@@ -8,10 +9,12 @@ import './Dashboard.css'
 export const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [data, setData] = useState(null);
+    const [user_name, setUserName] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     let user = localStorage.getItem("localData");
-    let userData = JSON.parse(user)
+    let userData = JSON.parse(user);
+    const navigate = useNavigate();
     const createDriver = async (e) => {
         e.preventDefault(); // Prevents the default form submission behavior
         const formData = new FormData(e.target);
@@ -35,11 +38,13 @@ export const Dashboard = () => {
     };
     useEffect(() => {        
         fetchData();
+        
     }, []); 
     const fetchData = async () => {
         try {
             let user = localStorage.getItem("localData");
             let userData = JSON.parse(user);
+            setUserName(userData[0].name)
             let data = {
                 user_id: userData[0]._id,
             };
@@ -54,7 +59,10 @@ export const Dashboard = () => {
     };
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
-
+    const logout=()=>{
+        localStorage.removeItem('localData');
+        navigate('/')
+    }
     return (
         <>
             <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
@@ -66,7 +74,10 @@ export const Dashboard = () => {
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <a className="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
-                            <img src="https://preview.webpixels.io/web/img/logos/clever-primary.svg" alt="..." />
+                           <h3>
+                             {user_name ? user_name:''}
+                            </h3>
+                            {/* <img src="https://preview.webpixels.io/web/img/logos/clever-primary.svg" alt="..." /> */}
                         </a>
                         <div className="navbar-user d-lg-none">
 
@@ -129,7 +140,7 @@ export const Dashboard = () => {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">
+                                    <a className="nav-link" onClick={logout}>
                                         <i className="bi bi-box-arrow-left"></i> Logout
                                     </a>
                                 </li>

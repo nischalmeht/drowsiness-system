@@ -205,6 +205,48 @@ class userControll {
             return response(res, status.UNEXPECTED_ERROR, 500, returnResponse);
         }
     };
+
+    static loginAsDriver = async (req, res) => {
+        let returnResponse = {};
+    
+        try {
+            let rules = {
+                'email': 'required|string|email',
+                'password': 'required|string',
+            };
+            let validation = new Validator(req.body, rules);
+    
+            const isValidData = validation.passes();
+    
+            if (!isValidData) {
+                let errorResponse = {};
+                for (let key in rules) {
+                    const error = validation.errors.get(key);
+                    if (error.length) {
+                        errorResponse[key] = error;
+                    }
+                }
+                return response(res, status.BAD_REQUEST, 400, errorResponse);
+            }
+            const { email, password, } = req.body;        
+            // Await the result of the database query
+            // const user = await URL.find({email:email,password:this.encrypt(password)}).select('email password')
+            const user = await drivers.find({email:email,password:this.encrypt(password)})
+            console.log(user)
+            // Check if user exists
+            if (!user || user.length<1) {
+                return response(res, status.NOT_FOUND, 404,  'User not found' );
+            }
+            return response(res, 'Data Found', 200, user);
+            
+        } catch (error) {
+            returnResponse = {
+                message: error.message
+            };
+            console.log(error, 'error');
+            return response(res, status.UNEXPECTED_ERROR, 500, returnResponse);
+        }
+    };
     
 }
 
